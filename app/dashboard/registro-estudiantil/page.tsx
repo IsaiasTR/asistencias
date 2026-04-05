@@ -13,7 +13,7 @@ const carrerasPorComision: any = {
   "25108": [
     "Arquitectura","Diseño Gráfico","Diseño de Imagen y Sonido",
     "Diseño de Indumentaria","Diseño Textil","Diseño Industrial",
-    "Lic. en Planificación y Diseño del Paisaje","Medicina",
+    "Lic. en Planificación y Diseño del Paisaje","Lic. en Psicología","Medicina",
     "Lic. en Enfermería","Lic. en Fonoaudiología","Lic. en Kinesiología",
     "Lic. en Nutrición","Lic. en Obstetricia",
     "Lic. en Producción de Bioimágenes","Lic. en Podología"
@@ -47,7 +47,7 @@ export default function RegistroEstudiantil() {
     materias_presenciales: "",
     materias_ubaxxi: "",
     horas_estudio: "",
-    trabajo: "",
+    situacion_laboral: "",
     viaje: "",
     primer_universitario: ""
   });
@@ -80,14 +80,14 @@ export default function RegistroEstudiantil() {
       { pregunta: "Genero", respuesta: form.genero },
       { pregunta: "Nacionalidad", respuesta: form.nacionalidad },
       { pregunta: "Estado civil", respuesta: form.estado_civil },
-      { pregunta: "Colegio", respuesta: form.colegio },
+      { pregunta: "Tipo de colegio de procedencia", respuesta: form.colegio },
       { pregunta: "Nota matemática secundaria", respuesta: form.nota_mate },
       { pregunta: "Recursante Matemática 51", respuesta: form.recursante },
       { pregunta: "Materias inscriptas", respuesta: form.materias_total },
       { pregunta: "Materias presenciales", respuesta: form.materias_presenciales },
       { pregunta: "Materias UBAXXI", respuesta: form.materias_ubaxxi },
       { pregunta: "Horas de estudio", respuesta: form.horas_estudio },
-      { pregunta: "Situación laboral", respuesta: form.trabajo },
+      { pregunta: "Situación laboral", respuesta: form.situacion_laboral },
       { pregunta: "Tiempo de viaje", respuesta: form.viaje },
       { pregunta: "Primer universitario", respuesta: form.primer_universitario },
     ].map((r) => ({
@@ -102,111 +102,133 @@ export default function RegistroEstudiantil() {
   };
 
   return (
-    <div className="p-10 max-w-xl mx-auto">
-      <h1 className="text-2xl font-bold mb-6">Registro Estudiantil</h1>
+    <div className="min-h-screen bg-gray-100 flex justify-center items-center p-6">
+      <div className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-2xl">
 
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <h1 className="text-3xl font-bold mb-6 text-center">
+          Registro Estudiantil
+        </h1>
 
-        <input name="dni" placeholder="DNI" onChange={handleChange} className="border p-2"/>
-        <input name="apellido" placeholder="Apellido" onChange={handleChange} className="border p-2"/>
-        <input name="nombre" placeholder="Nombre" onChange={handleChange} className="border p-2"/>
-        <input name="gmail" placeholder="Gmail" onChange={handleChange} className="border p-2"/>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
 
-        {/* COMISION */}
-        <select name="comision" onChange={handleChange} className="border p-2">
-          <option value="">Seleccionar Comisión</option>
-          {comisiones.map((c) => (
-            <option key={c.value} value={c.value}>{c.label}</option>
-          ))}
-        </select>
+          <input name="dni" placeholder="DNI" onChange={handleChange} className="input"/>
+          <input name="apellido" placeholder="Apellido" onChange={handleChange} className="input"/>
+          <input name="nombre" placeholder="Nombre" onChange={handleChange} className="input"/>
+          <input name="gmail" placeholder="Gmail" onChange={handleChange} className="input"/>
 
-        {/* CARRERA */}
-        <select name="carrera" onChange={handleChange} className="border p-2">
-          <option value="">Seleccionar Carrera</option>
-          {carrerasPorComision[form.comision]?.map((c: string) => (
-            <option key={c} value={c}>{c}</option>
-          ))}
-        </select>
+          <select name="comision" onChange={handleChange} className="input">
+            <option value="">Seleccionar sede y materia</option>
+            {comisiones.map((c) => (
+              <option key={c.value} value={c.value}>{c.label}</option>
+            ))}
+          </select>
 
-        <input name="edad" placeholder="Edad" onChange={handleChange} className="border p-2"/>
+          <select name="carrera" onChange={handleChange} className="input">
+            <option value="">Seleccionar Carrera</option>
+            {carrerasPorComision[form.comision]?.map((c: string) => (
+              <option key={c}>{c}</option>
+            ))}
+          </select>
 
-        <select name="genero" onChange={handleChange} className="border p-2">
-          <option value="">Genero</option>
-          <option>Masculino</option>
-          <option>Femenino</option>
-          <option>Otro</option>
-        </select>
+          <input name="edad" placeholder="Edad" onChange={handleChange} className="input"/>
 
-        <select name="nacionalidad" onChange={handleChange} className="border p-2">
-          <option value="">Nacionalidad</option>
-          <option>Argentina</option>
-          <option>Brasil</option>
-          <option>Bolivia</option>
-          <option>Colombia</option>
-          <option>Chile</option>
-          <option>Ecuador</option>
-          <option>Perú</option>
-          <option>Paraguay</option>
-          <option>Uruguay</option>
-          <option>Venezuela</option>
-          <option>Otro</option>
-        </select>
+          <select name="genero" onChange={handleChange} className="input">
+            <option value="">Genero</option>
+            <option>Masculino</option>
+            <option>Femenino</option>
+            <option>Otro</option>
+          </select>
 
-        <select name="estado_civil" onChange={handleChange} className="border p-2">
-          <option value="">Estado Civil</option>
-          <option>Soltero</option>
-          <option>Casado</option>
-        </select>
+          <select name="nacionalidad" onChange={handleChange} className="input">
+            <option value="">Nacionalidad</option>
+            <option>Argentina</option>
+            <option>Brasil</option>
+            <option>Bolivia</option>
+            <option>Colombia</option>
+            <option>Chile</option>
+            <option>Ecuador</option>
+            <option>Perú</option>
+            <option>Paraguay</option>
+            <option>Uruguay</option>
+            <option>Venezuela</option>
+            <option>Otro</option>
+          </select>
 
-        <select name="colegio" onChange={handleChange} className="border p-2">
-          <option value="">Tipo de Colegio</option>
-          <option>Público</option>
-          <option>Privado</option>
-        </select>
+          <select name="estado_civil" onChange={handleChange} className="input">
+            <option value="">Estado Civil</option>
+            <option>Soltero</option>
+            <option>Casado</option>
+          </select>
 
-        <input name="nota_mate" placeholder="Nota matemática secundaria" onChange={handleChange} className="border p-2"/>
+          <select name="colegio" onChange={handleChange} className="input">
+            <option value="">Tipo de colegio de procedencia</option>
+            <option>Público</option>
+            <option>Privado religioso</option>
+            <option>Privado laico</option>
+            <option>Técnico</option>
+            <option>Otro</option>
+          </select>
 
-        <select name="recursante" onChange={handleChange} className="border p-2">
-          <option value="">Recursante</option>
-          <option>Si</option>
-          <option>No</option>
-        </select>
+          <input name="nota_mate" placeholder="Nota matemática secundaria" onChange={handleChange} className="input"/>
 
-        <input name="materias_total" placeholder="Materias totales" onChange={handleChange} className="border p-2"/>
-        <input name="materias_presenciales" placeholder="Materias presenciales" onChange={handleChange} className="border p-2"/>
-        <input name="materias_ubaxxi" placeholder="Materias UBAXXI" onChange={handleChange} className="border p-2"/>
+          <select name="recursante" onChange={handleChange} className="input">
+            <option value="">Recursante</option>
+            <option>Si</option>
+            <option>No</option>
+          </select>
 
-        <select name="horas_estudio" onChange={handleChange} className="border p-2">
-          <option value="">Horas de estudio</option>
-          <option>2 horas</option>
-          <option>4 horas</option>
-          <option>6 horas</option>
-          <option>8 horas</option>
-          <option>10 horas</option>
-          <option>12 horas</option>
-        </select>
+          <select name="materias_total" onChange={handleChange} className="input">
+            <option value="">Cantidad de materias que está cursando actualmente</option>
+            {[1,2,3,4,5,6].map(n => <option key={n}>{n}</option>)}
+          </select>
 
-        <select name="trabajo" onChange={handleChange} className="border p-2">
-          <option value="">Situación laboral</option>
-          <option>Trabajo</option>
-          <option>No Trabajo</option>
-        </select>
+          <select name="materias_presenciales" onChange={handleChange} className="input">
+            <option value="">Materias presenciales</option>
+            {[1,2,3,4,5,6].map(n => <option key={n}>{n}</option>)}
+          </select>
 
-        <select name="viaje" onChange={handleChange} className="border p-2">
-          <option value="">Tiempo de viaje</option>
-          <option>Menos de 30 min</option>
-          <option>30 min - 1 hora</option>
-          <option>Más de 1 hora</option>
-        </select>
+          <select name="materias_ubaxxi" onChange={handleChange} className="input">
+            <option value="">Materias por UBAXXI</option>
+            {[1,2,3,4,5,6].map(n => <option key={n}>{n}</option>)}
+          </select>
 
-        <input name="primer_universitario" placeholder="Primer universitario (Si/No)" onChange={handleChange} className="border p-2"/>
+          <select name="horas_estudio" onChange={handleChange} className="input">
+            <option value="">¿Cuántas horas por semana piensa dedicarle a esta materia?</option>
+            <option>2 horas</option>
+            <option>4 horas</option>
+            <option>6 horas</option>
+            <option>8 horas</option>
+            <option>10 horas</option>
+            <option>12 horas</option>
+          </select>
 
-        <button className="bg-blue-500 text-white p-3 rounded">
-          Registrar
-        </button>
-      </form>
+          <select name="situacion_laboral" onChange={handleChange} className="input">
+            <option value="">Situación laboral</option>
+            <option>Trabajo</option>
+            <option>No Trabajo</option>
+          </select>
+
+          <select name="viaje" onChange={handleChange} className="input">
+            <option value="">Tiempo de viaje para llegar a la sede</option>
+            <option>Menos de 30 min</option>
+            <option>30 min - 1 hora</option>
+            <option>Más de 1 hora</option>
+          </select>
+
+          <select name="primer_universitario" onChange={handleChange} className="input">
+            <option value="">¿Primer universitario en la familia?</option>
+            <option>Si</option>
+            <option>No</option>
+          </select>
+
+          <button className="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-xl font-semibold transition">
+            Registrar
+          </button>
+        </form>
+      </div>
     </div>
   );
 }
+
 
 
