@@ -29,6 +29,7 @@ const carrerasPorComision: any = {
 };
 
 export default function RegistroEstudiantil() {
+
   const [form, setForm] = useState({
     dni: "",
     apellido: "",
@@ -42,13 +43,13 @@ export default function RegistroEstudiantil() {
     estado_civil: "",
     colegio: "",
     nota_mate: "",
-    recursante: "",
+    primera_vez: "",
     materias_total: "",
     materias_presenciales: "",
     materias_ubaxxi: "",
     horas_estudio: "",
     situacion_laboral: "",
-    viaje: "",
+    tiempo_viaje: "",
     primer_universitario: ""
   });
 
@@ -59,6 +60,29 @@ export default function RegistroEstudiantil() {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
 
+    // 🔴 VALIDAR CAMPOS VACÍOS
+    const camposFaltantes = Object.entries(form)
+      .filter(([_, value]) => !value)
+      .map(([key]) => key);
+
+    if (camposFaltantes.length > 0) {
+      alert("Falta completar los siguientes campos");
+      return;
+    }
+
+    // 🔴 VALIDAR DNI EXISTENTE
+    const { data: existente } = await supabase
+      .from("alumnos")
+      .select("dni")
+      .eq("dni", form.dni)
+      .single();
+
+    if (existente) {
+      alert("Usted ya está registrado");
+      return;
+    }
+
+    // 🔵 INSERTAR ALUMNO
     const { error } = await supabase.from("alumnos").insert([
       {
         dni: form.dni,
@@ -75,6 +99,7 @@ export default function RegistroEstudiantil() {
       return;
     }
 
+    // 🔵 INSERTAR RESPUESTAS
     const respuestas = [
       { pregunta: "Edad", respuesta: form.edad },
       { pregunta: "Genero", respuesta: form.genero },
@@ -82,13 +107,13 @@ export default function RegistroEstudiantil() {
       { pregunta: "Estado civil", respuesta: form.estado_civil },
       { pregunta: "Tipo de colegio de procedencia", respuesta: form.colegio },
       { pregunta: "Nota matemática secundaria", respuesta: form.nota_mate },
-      { pregunta: "Recursante Matemática 51", respuesta: form.recursante },
+      { pregunta: "Primera vez cursando Matemática", respuesta: form.primera_vez },
       { pregunta: "Materias inscriptas", respuesta: form.materias_total },
       { pregunta: "Materias presenciales", respuesta: form.materias_presenciales },
       { pregunta: "Materias UBAXXI", respuesta: form.materias_ubaxxi },
       { pregunta: "Horas de estudio", respuesta: form.horas_estudio },
       { pregunta: "Situación laboral", respuesta: form.situacion_laboral },
-      { pregunta: "Tiempo de viaje", respuesta: form.viaje },
+      { pregunta: "Tiempo de viaje", respuesta: form.tiempo_viaje },
       { pregunta: "Primer universitario", respuesta: form.primer_universitario },
     ].map((r) => ({
       dni: form.dni,
@@ -98,7 +123,32 @@ export default function RegistroEstudiantil() {
 
     await supabase.from("respuestas_estudiante").insert(respuestas);
 
-    alert("Registro completado");
+    // 🟢 MENSAJE FINAL
+    alert("Datos guardados correctamente");
+
+    // 🔄 LIMPIAR FORMULARIO
+    setForm({
+      dni: "",
+      apellido: "",
+      nombre: "",
+      gmail: "",
+      comision: "",
+      carrera: "",
+      edad: "",
+      genero: "",
+      nacionalidad: "",
+      estado_civil: "",
+      colegio: "",
+      nota_mate: "",
+      primera_vez: "",
+      materias_total: "",
+      materias_presenciales: "",
+      materias_ubaxxi: "",
+      horas_estudio: "",
+      situacion_laboral: "",
+      tiempo_viaje: "",
+      primer_universitario: ""
+    });
   };
 
   return (
@@ -112,9 +162,9 @@ export default function RegistroEstudiantil() {
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
 
           <input name="dni" placeholder="DNI" onChange={handleChange} className="input"/>
-          <input name="apellido" placeholder="Apellido" onChange={handleChange} className="input"/>
-          <input name="nombre" placeholder="Nombre" onChange={handleChange} className="input"/>
-          <input name="gmail" placeholder="Gmail" onChange={handleChange} className="input"/>
+          <input name="apellido" placeholder="Apellidos" onChange={handleChange} className="input"/>
+          <input name="nombre" placeholder="Nombres" onChange={handleChange} className="input"/>
+          <input name="gmail" placeholder="Correo electrónico" onChange={handleChange} className="input"/>
 
           <select name="comision" onChange={handleChange} className="input">
             <option value="">Seleccionar sede y materia</option>
@@ -133,7 +183,7 @@ export default function RegistroEstudiantil() {
           <input name="edad" placeholder="Edad" onChange={handleChange} className="input"/>
 
           <select name="genero" onChange={handleChange} className="input">
-            <option value="">Genero</option>
+            <option value="">Género</option>
             <option>Masculino</option>
             <option>Femenino</option>
             <option>Otro</option>
@@ -155,7 +205,7 @@ export default function RegistroEstudiantil() {
           </select>
 
           <select name="estado_civil" onChange={handleChange} className="input">
-            <option value="">Estado Civil</option>
+            <option value="">Estado civil</option>
             <option>Soltero</option>
             <option>Casado</option>
           </select>
@@ -169,12 +219,12 @@ export default function RegistroEstudiantil() {
             <option>Otro</option>
           </select>
 
-          <input name="nota_mate" placeholder="Nota matemática secundaria" onChange={handleChange} className="input"/>
+          <input name="nota_mate" placeholder="Nota final de matemática en la secundaria" onChange={handleChange} className="input"/>
 
-          <select name="recursante" onChange={handleChange} className="input">
-            <option value="">Recursante</option>
-            <option>Si</option>
-            <option>No</option>
+          <select name="primera_vez" onChange={handleChange} className="input">
+            <option value="">¿Es la primera vez que cursás Matemática?</option>
+            <option value="Si">Si</option>
+            <option value="No">No</option>
           </select>
 
           <select name="materias_total" onChange={handleChange} className="input">
@@ -208,7 +258,7 @@ export default function RegistroEstudiantil() {
             <option>No Trabajo</option>
           </select>
 
-          <select name="viaje" onChange={handleChange} className="input">
+          <select name="tiempo_viaje" onChange={handleChange} className="input">
             <option value="">Tiempo de viaje para llegar a la sede</option>
             <option>Menos de 30 min</option>
             <option>30 min - 1 hora</option>
@@ -229,6 +279,3 @@ export default function RegistroEstudiantil() {
     </div>
   );
 }
-
-
-
