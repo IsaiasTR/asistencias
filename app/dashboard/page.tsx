@@ -74,6 +74,12 @@ export default function Dashboard() {
           );
         })}
       </div>
+
+      <div className="mt-12 text-center text-gray-400 text-lg tracking-wide">
+        © {new Date().getFullYear()} · Diseñado y desarrollado por <span className="font-semibold text-gray-600">Isaias Tenorio</span>
+      </div>
     </div>
   );
 }
+
+
