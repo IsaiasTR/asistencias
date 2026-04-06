@@ -31,7 +31,7 @@ const carrerasPorComision: any = {
 export default function RegistroEstudiantil() {
 
   const [mensaje, setMensaje] = useState("");
-  const [tipoMensaje, setTipoMensaje] = useState(""); // success | error
+  const [tipoMensaje, setTipoMensaje] = useState("");
 
   const [form, setForm] = useState({
     dni: "",
@@ -160,16 +160,6 @@ export default function RegistroEstudiantil() {
           Registro Estudiantil
         </h1>
 
-        {mensaje && (
-          <div className={`p-4 mb-4 rounded-xl text-center font-semibold ${
-            tipoMensaje === "success"
-              ? "bg-green-100 text-green-700 border border-green-300"
-              : "bg-red-100 text-red-700 border border-red-300"
-          }`}>
-            {mensaje}
-          </div>
-        )}
-
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
 
           <input name="dni" placeholder="DNI" onChange={handleChange} className="input"/>
@@ -224,13 +214,10 @@ export default function RegistroEstudiantil() {
           <select name="colegio" onChange={handleChange} className="input">
             <option value="">Tipo de colegio de procedencia</option>
             <option>Público</option>
-            <option>Privado religioso</option>
-            <option>Privado laico</option>
-            <option>Técnico</option>
-            <option>Otro</option>
+            <option>Privado</option>
           </select>
 
-          <input name="nota_mate" placeholder="Nota final de matemática en la secundaria" onChange={handleChange} className="input"/>
+          <input name="nota_mate" placeholder="Nota final de matemática del secundario" onChange={handleChange} className="input"/>
 
           <select name="primera_vez" onChange={handleChange} className="input">
             <option value="">¿Es la primera vez que cursás Matemática?</option>
@@ -250,7 +237,7 @@ export default function RegistroEstudiantil() {
 
           <select name="materias_ubaxxi" onChange={handleChange} className="input">
             <option value="">Materias por UBAXXI</option>
-            {[1,2,3,4,5,6].map(n => <option key={n}>{n}</option>)}
+            {[0,1,2,3,4,5,6].map(n => <option key={n}>{n}</option>)}
           </select>
 
           <select name="horas_estudio" onChange={handleChange} className="input">
@@ -285,9 +272,22 @@ export default function RegistroEstudiantil() {
           <button className="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-xl font-semibold transition">
             Registrar
           </button>
+
+          {/* 🔥 MENSAJE ABAJO DEL BOTÓN */}
+          {mensaje && (
+            <div className={`mt-4 p-5 rounded-xl text-center font-bold text-lg shadow-md ${
+              tipoMensaje === "success"
+                ? "bg-green-100 text-green-800 border border-green-400"
+                : "bg-red-100 text-red-800 border border-red-400"
+            }`}>
+              {mensaje}
+            </div>
+          )}
+
         </form>
       </div>
     </div>
   );
 }
+
 
