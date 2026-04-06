@@ -33,6 +33,11 @@ export default function RegistroEstudiantil() {
   const [mensaje, setMensaje] = useState("");
   const [tipoMensaje, setTipoMensaje] = useState("");
 
+  const cerrarMensaje = () => {
+    setMensaje("");
+    setTipoMensaje("");
+  };
+
   const [form, setForm] = useState({
     dni: "",
     apellido: "",
@@ -68,8 +73,34 @@ export default function RegistroEstudiantil() {
       .map(([key]) => key);
 
     if (camposFaltantes.length > 0) {
+
+      const nombresCampos: any = {
+        dni: "DNI",
+        apellido: "Apellido",
+        nombre: "Nombre",
+        gmail: "Correo electrónico",
+        comision: "Sede y materia",
+        carrera: "Carrera",
+        edad: "Edad",
+        genero: "Género",
+        nacionalidad: "Nacionalidad",
+        estado_civil: "Estado civil",
+        colegio: "Tipo de colegio",
+        nota_mate: "Nota de matemática",
+        primera_vez: "Primera vez cursando",
+        materias_total: "Cantidad de materias",
+        materias_presenciales: "Materias presenciales",
+        materias_ubaxxi: "Materias UBAXXI",
+        horas_estudio: "Horas de estudio",
+        situacion_laboral: "Situación laboral",
+        tiempo_viaje: "Tiempo de viaje",
+        primer_universitario: "Primer universitario"
+      };
+
+      const camposLegibles = camposFaltantes.map(c => nombresCampos[c]);
+
       setTipoMensaje("error");
-      setMensaje("Falta completar los siguientes campos");
+      setMensaje(`Falta completar: ${camposLegibles.join(", ")}`);
       return;
     }
 
@@ -153,7 +184,7 @@ export default function RegistroEstudiantil() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex justify-center items-center p-6">
+    <div className="min-h-screen bg-gray-100 flex justify-center items-center p-6 relative">
       <div className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-2xl">
 
         <h1 className="text-3xl font-bold mb-6 text-center">
@@ -272,20 +303,40 @@ export default function RegistroEstudiantil() {
           <button className="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-xl font-semibold transition">
             Registrar
           </button>
-
-          {/* 🔥 MENSAJE ABAJO DEL BOTÓN */}
-          {mensaje && (
-            <div className={`mt-4 p-5 rounded-xl text-center font-bold text-lg shadow-md ${
-              tipoMensaje === "success"
-                ? "bg-green-100 text-green-800 border border-green-400"
-                : "bg-red-100 text-red-800 border border-red-400"
-            }`}>
-              {mensaje}
-            </div>
-          )}
-
         </form>
       </div>
+
+      {/* 🔥 MODAL PROFESIONAL */}
+      {mensaje && (
+        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40">
+          <div className="bg-white p-6 rounded-2xl shadow-xl w-full max-w-md text-center relative">
+
+            <button
+              onClick={cerrarMensaje}
+              className="absolute top-3 right-3 text-gray-500 hover:text-black"
+            >
+              ✕
+            </button>
+
+            <h2 className={`text-xl font-bold mb-4 ${
+              tipoMensaje === "success" ? "text-green-600" : "text-red-600"
+            }`}>
+              {tipoMensaje === "success" ? "Éxito" : "Error"}
+            </h2>
+
+            <p className="text-lg">{mensaje}</p>
+
+            <button
+              onClick={cerrarMensaje}
+              className="mt-5 px-6 py-2 bg-blue-600 text-white rounded-xl"
+            >
+              Cerrar
+            </button>
+
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }
