@@ -28,11 +28,11 @@ body {
 /* Estilos de los inputs */
 .input {
   border: 1px solid #ccc;
-  padding: 14px;
+  padding: 12px;
   border-radius: 12px;
   width: 100%;
-  font-size: 1.2rem;
-  font-weight: bold; /* Para que se vea nítido */
+  font-size: 1rem; /* un tamaño más moderado */
+  font-weight: bold; /* sigue en negrita para buena visibilidad */
   transition: 0.2s;
 }
 
@@ -45,9 +45,10 @@ body {
 /* Ajuste extra para móviles */
 @media (max-width: 640px) {
   .input {
-    font-size: 1.4rem;
-    padding: 16px;
-    font-weight: bold; /* Asegurar negrita en móviles */
+    font-size: 1.1rem;
+    padding: 14px;
+    font-weight: bold;
   }
 }
+
 
