@@ -28,11 +28,11 @@ body {
 /* Estilos de los inputs */
 .input {
   border: 1px solid #ccc;
-  padding: 12px;
+  padding: 11px;
   border-radius: 12px;
   width: 100%;
-  font-size: 1rem; /* un tamaño más moderado */
-  font-weight: bold; /* sigue en negrita para buena visibilidad */
+  font-size: 0.9rem; /* más pequeño y equilibrado */
+  font-weight: bold;
   transition: 0.2s;
 }
 
@@ -42,11 +42,11 @@ body {
   box-shadow: 0 0 0 2px rgba(37,99,235,0.2);
 }
 
-/* Ajuste extra para móviles */
+/* Ajuste para móviles */
 @media (max-width: 640px) {
   .input {
-    font-size: 1.1rem;
-    padding: 14px;
+    font-size: 1rem; /* apenas más grande en celular */
+    padding: 13px;
     font-weight: bold;
   }
 }
