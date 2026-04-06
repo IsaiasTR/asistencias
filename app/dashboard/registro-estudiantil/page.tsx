@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
-import { useRouter } from "next/navigation";
 
 const comisiones = [
   { label: "Ciudad Universitaria - Matemática", value: "25108" },
@@ -30,8 +29,6 @@ const carrerasPorComision: any = {
 };
 
 export default function RegistroEstudiantil() {
-
-  const router = useRouter();
 
   const [mensaje, setMensaje] = useState("");
   const [tipoMensaje, setTipoMensaje] = useState("");
@@ -217,15 +214,100 @@ export default function RegistroEstudiantil() {
 
           <input name="edad" placeholder="Edad" onChange={handleChange} className="input"/>
 
-          {/* 🔥 BOTONES */}
-          <div className="flex gap-4 mt-2">
+          <select name="genero" onChange={handleChange} className="input">
+            <option value="">Género</option>
+            <option>Masculino</option>
+            <option>Femenino</option>
+            <option>Otro</option>
+          </select>
+
+          <select name="nacionalidad" onChange={handleChange} className="input">
+            <option value="">Nacionalidad</option>
+            <option>Argentina</option>
+            <option>Brasil</option>
+            <option>Bolivia</option>
+            <option>Colombia</option>
+            <option>Chile</option>
+            <option>Ecuador</option>
+            <option>Perú</option>
+            <option>Paraguay</option>
+            <option>Uruguay</option>
+            <option>Venezuela</option>
+            <option>Otro</option>
+          </select>
+
+          <select name="estado_civil" onChange={handleChange} className="input">
+            <option value="">Estado civil</option>
+            <option>Soltero</option>
+            <option>Casado</option>
+          </select>
+
+          <select name="colegio" onChange={handleChange} className="input">
+            <option value="">Tipo de colegio de procedencia</option>
+            <option>Público</option>
+            <option>Privado</option>
+          </select>
+
+          <input name="nota_mate" placeholder="Nota final de matemática del secundario" onChange={handleChange} className="input"/>
+
+          <select name="primera_vez" onChange={handleChange} className="input">
+            <option value="">¿Es la primera vez que cursás Matemática?</option>
+            <option value="Si">Si</option>
+            <option value="No">No</option>
+          </select>
+
+          <select name="materias_total" onChange={handleChange} className="input">
+            <option value="">Cantidad de materias que está cursando actualmente</option>
+            {[1,2,3,4,5,6].map(n => <option key={n}>{n}</option>)}
+          </select>
+
+          <select name="materias_presenciales" onChange={handleChange} className="input">
+            <option value="">Materias presenciales</option>
+            {[1,2,3,4,5,6].map(n => <option key={n}>{n}</option>)}
+          </select>
+
+          <select name="materias_ubaxxi" onChange={handleChange} className="input">
+            <option value="">Materias por UBAXXI</option>
+            {[0,1,2,3,4,5,6].map(n => <option key={n}>{n}</option>)}
+          </select>
+
+          <select name="horas_estudio" onChange={handleChange} className="input">
+            <option value="">¿Cuántas horas de estudio por semana piensa dedicarle a esta materia?</option>
+            <option>2 horas</option>
+            <option>4 horas</option>
+            <option>6 horas</option>
+            <option>8 horas</option>
+            <option>10 horas</option>
+            <option>Más de 10 horas</option>
+          </select>
+
+          <select name="situacion_laboral" onChange={handleChange} className="input">
+            <option value="">Situación laboral</option>
+            <option>Trabajo</option>
+            <option>No Trabajo</option>
+          </select>
+
+          <select name="tiempo_viaje" onChange={handleChange} className="input">
+            <option value="">Tiempo de viaje para llegar a la sede</option>
+            <option>Menos de 30 min</option>
+            <option>30 min - 1 hora</option>
+            <option>Más de 1 hora</option>
+          </select>
+
+          <select name="primer_universitario" onChange={handleChange} className="input">
+            <option value="">¿Primer universitario en la familia?</option>
+            <option>Si</option>
+            <option>No</option>
+          </select>
+
+          <div className="flex gap-4">
             <button className="w-full bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-xl font-semibold transition">
               REGISTRAR
             </button>
 
             <button
               type="button"
-              onClick={() => router.push("/")}
+              onClick={() => window.history.back()}
               className="w-full bg-gray-500 hover:bg-gray-600 text-white p-3 rounded-xl font-semibold transition"
             >
               SALIR
@@ -235,7 +317,6 @@ export default function RegistroEstudiantil() {
         </form>
       </div>
 
-      {/* 🔥 MODAL */}
       {mensaje && (
         <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40">
           <div className="bg-white p-6 rounded-2xl shadow-xl w-full max-w-md text-center relative">
@@ -250,7 +331,7 @@ export default function RegistroEstudiantil() {
             <h2 className={`text-xl font-bold mb-4 ${
               tipoMensaje === "success" ? "text-green-600" : "text-red-600"
             }`}>
-              {tipoMensaje === "success" ? "ÉXITO" : "ERROR"}
+              {tipoMensaje === "success" ? "Éxito" : "Error"}
             </h2>
 
             <p className="text-lg">{mensaje}</p>
@@ -269,5 +350,4 @@ export default function RegistroEstudiantil() {
     </div>
   );
 }
-
 
