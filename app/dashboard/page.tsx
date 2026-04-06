@@ -36,7 +36,7 @@ const items = [
     color: "bg-purple-500"
   },
   {
-    name: "Autoevaluaciones",
+    name: "Modelos de Parcial",
     path: "/dashboard/autoevaluaciones",
     icon: BookOpen,
     color: "bg-pink-500"
