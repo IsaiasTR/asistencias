@@ -30,6 +30,9 @@ const carrerasPorComision: any = {
 
 export default function RegistroEstudiantil() {
 
+  const [mensaje, setMensaje] = useState("");
+  const [tipoMensaje, setTipoMensaje] = useState(""); // success | error
+
   const [form, setForm] = useState({
     dni: "",
     apellido: "",
@@ -60,17 +63,16 @@ export default function RegistroEstudiantil() {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
 
-    // 🔴 VALIDAR CAMPOS VACÍOS
     const camposFaltantes = Object.entries(form)
       .filter(([_, value]) => !value)
       .map(([key]) => key);
 
     if (camposFaltantes.length > 0) {
-      alert("Falta completar los siguientes campos");
+      setTipoMensaje("error");
+      setMensaje("Falta completar los siguientes campos");
       return;
     }
 
-    // 🔴 VALIDAR DNI EXISTENTE
     const { data: existente } = await supabase
       .from("alumnos")
       .select("dni")
@@ -78,11 +80,11 @@ export default function RegistroEstudiantil() {
       .single();
 
     if (existente) {
-      alert("Usted ya está registrado");
+      setTipoMensaje("error");
+      setMensaje("Usted ya está registrado");
       return;
     }
 
-    // 🔵 INSERTAR ALUMNO
     const { error } = await supabase.from("alumnos").insert([
       {
         dni: form.dni,
@@ -95,11 +97,11 @@ export default function RegistroEstudiantil() {
     ]);
 
     if (error) {
-      alert("Error al guardar alumno");
+      setTipoMensaje("error");
+      setMensaje("Error al guardar alumno");
       return;
     }
 
-    // 🔵 INSERTAR RESPUESTAS
     const respuestas = [
       { pregunta: "Edad", respuesta: form.edad },
       { pregunta: "Genero", respuesta: form.genero },
@@ -123,10 +125,9 @@ export default function RegistroEstudiantil() {
 
     await supabase.from("respuestas_estudiante").insert(respuestas);
 
-    // 🟢 MENSAJE FINAL
-    alert("Datos guardados correctamente");
+    setTipoMensaje("success");
+    setMensaje("Datos guardados correctamente");
 
-    // 🔄 LIMPIAR FORMULARIO
     setForm({
       dni: "",
       apellido: "",
@@ -158,6 +159,16 @@ export default function RegistroEstudiantil() {
         <h1 className="text-3xl font-bold mb-6 text-center">
           Registro Estudiantil
         </h1>
+
+        {mensaje && (
+          <div className={`p-4 mb-4 rounded-xl text-center font-semibold ${
+            tipoMensaje === "success"
+              ? "bg-green-100 text-green-700 border border-green-300"
+              : "bg-red-100 text-red-700 border border-red-300"
+          }`}>
+            {mensaje}
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
 
@@ -279,3 +290,4 @@ export default function RegistroEstudiantil() {
     </div>
   );
 }
+
