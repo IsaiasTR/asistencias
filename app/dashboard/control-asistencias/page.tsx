@@ -72,25 +72,29 @@ export default function ControlAsistencias() {
         </h1>
 
         {/* 🔍 BUSCADOR */}
-        <form onSubmit={handleBuscar} className="flex gap-4 mb-6">
+        <form onSubmit={handleBuscar} className="flex flex-col gap-4 mb-6">
+
           <input
             value={dni}
             onChange={(e) => setDni(e.target.value)}
             placeholder="Ingresar DNI"
-            className="input flex-1"
+            className="input"
           />
 
-          <button className="bg-green-600 hover:bg-green-700 text-white px-6 rounded-xl font-semibold">
-            BUSCAR
-          </button>
+          <div className="flex gap-4">
+            <button className="w-full bg-green-600 hover:bg-green-700 text-white p-3 rounded-xl font-semibold">
+              BUSCAR
+            </button>
 
-          <button
-            type="button"
-            onClick={() => window.history.back()}
-            className="bg-gray-500 hover:bg-gray-600 text-white px-6 rounded-xl font-semibold"
-          >
-            SALIR
-          </button>
+            <button
+              type="button"
+              onClick={() => window.history.back()}
+              className="w-full bg-gray-500 hover:bg-gray-600 text-white p-3 rounded-xl font-semibold"
+            >
+              SALIR
+            </button>
+          </div>
+
         </form>
 
         {/* 📊 TABLA */}
@@ -163,4 +167,5 @@ export default function ControlAsistencias() {
     </div>
   );
 }
+
 
