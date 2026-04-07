@@ -44,7 +44,7 @@ export default function ControlAsistencias() {
       .from("asistencias")
       .select("*")
       .eq("dni", dni)
-      .order("fecha", { ascending: true });
+      .order("clase", { ascending: true });
 
     if (error) {
       setTipoMensaje("error");
@@ -110,7 +110,7 @@ export default function ControlAsistencias() {
                   <tr key={i} className="border-t">
 
                     <td className="p-3 font-semibold">
-                      {a.fecha}
+                      {a.clase}
                     </td>
 
                     <td className={`p-3 text-center font-bold ${
@@ -163,3 +163,4 @@ export default function ControlAsistencias() {
     </div>
   );
 }
+
