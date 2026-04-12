@@ -7,6 +7,7 @@ export default function ControlAsistencias() {
 
   const [dni, setDni] = useState("");
   const [asistencias, setAsistencias] = useState<any[]>([]);
+  const [alumno, setAlumno] = useState<any>(null);
 
   const [mensaje, setMensaje] = useState("");
   const [tipoMensaje, setTipoMensaje] = useState("");
@@ -25,19 +26,22 @@ export default function ControlAsistencias() {
       return;
     }
 
-    // 🔎 Validar si el alumno existe
-    const { data: alumno } = await supabase
+    // 🔎 Traer datos del alumno
+    const { data: alumnoData } = await supabase
       .from("alumnos")
-      .select("dni")
+      .select("dni, apellido, nombre, comision")
       .eq("dni", dni)
       .single();
 
-    if (!alumno) {
+    if (!alumnoData) {
       setTipoMensaje("error");
       setMensaje("El DNI no está registrado");
       setAsistencias([]);
+      setAlumno(null);
       return;
     }
+
+    setAlumno(alumnoData);
 
     // 📊 Traer asistencias
     const { data, error } = await supabase
@@ -96,6 +100,27 @@ export default function ControlAsistencias() {
           </div>
 
         </form>
+
+        {/* 👤 DATOS DEL ALUMNO */}
+        {alumno && (
+          <div className="bg-blue-50 border border-blue-200 rounded-xl p-5 mb-6 shadow-sm">
+
+            <h2 className="text-xl font-bold text-blue-700 mb-3">
+              Información del Alumno
+            </h2>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-gray-700">
+
+              <p><span className="font-semibold">DNI:</span> {alumno.dni}</p>
+              <p><span className="font-semibold">Comisión:</span> {alumno.comision}</p>
+
+              <p><span className="font-semibold">Apellido:</span> {alumno.apellido}</p>
+              <p><span className="font-semibold">Nombre:</span> {alumno.nombre}</p>
+
+            </div>
+
+          </div>
+        )}
 
         {/* 📊 TABLA */}
         {asistencias.length > 0 && (
@@ -167,5 +192,6 @@ export default function ControlAsistencias() {
     </div>
   );
 }
+
 
 
