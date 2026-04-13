@@ -8,6 +8,7 @@ export default function ControlAsistencias() {
   const [dni, setDni] = useState("");
   const [asistencias, setAsistencias] = useState<any[]>([]);
   const [alumno, setAlumno] = useState<any>(null);
+  const [porcentaje, setPorcentaje] = useState<number | null>(null);
 
   const [mensaje, setMensaje] = useState("");
   const [tipoMensaje, setTipoMensaje] = useState("");
@@ -38,6 +39,7 @@ export default function ControlAsistencias() {
       setMensaje("El DNI no está registrado");
       setAsistencias([]);
       setAlumno(null);
+      setPorcentaje(null);
       return;
     }
 
@@ -60,10 +62,19 @@ export default function ControlAsistencias() {
       setTipoMensaje("error");
       setMensaje("No hay asistencias registradas");
       setAsistencias([]);
+      setPorcentaje(null);
       return;
     }
 
     setAsistencias(data);
+
+    // 🔢 CALCULAR PORCENTAJE
+    const total = data.length;
+    const presentes = data.filter((a) => a.presente).length;
+
+    const porcentajeFinal = (presentes / total) * 100;
+
+    setPorcentaje(porcentajeFinal);
   };
 
   return (
@@ -124,36 +135,59 @@ export default function ControlAsistencias() {
 
         {/* 📊 TABLA */}
         {asistencias.length > 0 && (
-          <div className="overflow-x-auto">
-            <table className="w-full border rounded-xl overflow-hidden">
+          <>
+            <div className="overflow-x-auto">
+              <table className="w-full border rounded-xl overflow-hidden">
 
-              <thead className="bg-gray-200">
-                <tr>
-                  <th className="p-3 text-left">Clase</th>
-                  <th className="p-3 text-center">Estado</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                {asistencias.map((a, i) => (
-                  <tr key={i} className="border-t">
-
-                    <td className="p-3 font-semibold">
-                      {a.clase}
-                    </td>
-
-                    <td className={`p-3 text-center font-bold ${
-                      a.presente ? "text-green-600" : "text-red-600"
-                    }`}>
-                      {a.presente ? "Presente" : "Ausente"}
-                    </td>
-
+                <thead className="bg-gray-200">
+                  <tr>
+                    <th className="p-3 text-left">Clase</th>
+                    <th className="p-3 text-center">Estado</th>
                   </tr>
-                ))}
-              </tbody>
+                </thead>
 
-            </table>
-          </div>
+                <tbody>
+                  {asistencias.map((a, i) => (
+                    <tr key={i} className="border-t">
+
+                      <td className="p-3 font-semibold">
+                        {a.clase}
+                      </td>
+
+                      <td className={`p-3 text-center font-bold ${
+                        a.presente ? "text-green-600" : "text-red-600"
+                      }`}>
+                        {a.presente ? "Presente" : "Ausente"}
+                      </td>
+
+                    </tr>
+                  ))}
+                </tbody>
+
+              </table>
+            </div>
+
+            {/* 📈 PORCENTAJE */}
+            {porcentaje !== null && (
+              <div className="mt-6 bg-green-50 border border-green-200 rounded-xl p-5 text-center shadow-sm">
+
+                <h2 className="text-xl font-bold text-green-700 mb-2">
+                  Porcentaje de Asistencia
+                </h2>
+
+                <p className={`text-3xl font-bold ${
+                  porcentaje >= 75
+                    ? "text-green-600"
+                    : porcentaje >= 50
+                    ? "text-yellow-600"
+                    : "text-red-600"
+                }`}>
+                  {porcentaje.toFixed(1)}%
+                </p>
+
+              </div>
+            )}
+          </>
         )}
 
       </div>
@@ -192,6 +226,7 @@ export default function ControlAsistencias() {
     </div>
   );
 }
+
 
 
 
