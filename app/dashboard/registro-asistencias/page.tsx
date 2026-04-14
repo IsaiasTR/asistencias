@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabaseClient";
 
 export default function RegistroAsistencias() {
@@ -11,22 +11,37 @@ export default function RegistroAsistencias() {
   const [mensaje, setMensaje] = useState("");
   const [tipoMensaje, setTipoMensaje] = useState("");
 
+  const [habilitado, setHabilitado] = useState<boolean | null>(null);
+
   const cerrarMensaje = () => {
     setMensaje("");
     setTipoMensaje("");
   };
 
+  // 🔄 Cargar estado del sistema
+  useEffect(() => {
+    const fetchEstado = async () => {
+      const { data, error } = await supabase
+        .from("control_asistencia")
+        .select("habilitado")
+        .eq("id", 1)
+        .single();
+
+      if (data) setHabilitado(data.habilitado);
+    };
+
+    fetchEstado();
+  }, []);
+
   const handleSubmit = async (e: any) => {
     e.preventDefault();
 
-    // 🔴 Validación básica
     if (!dni || !clave) {
       setTipoMensaje("error");
       setMensaje("Debe completar DNI y clave");
       return;
     }
 
-    // 🔎 Verificar si el alumno existe
     const { data: alumno } = await supabase
       .from("alumnos")
       .select("dni")
@@ -39,7 +54,6 @@ export default function RegistroAsistencias() {
       return;
     }
 
-    // 🔑 Validar clave
     const { data: claveData } = await supabase
       .from("claves_clase")
       .select("clase")
@@ -55,7 +69,6 @@ export default function RegistroAsistencias() {
 
     const clase = claveData.clase;
 
-    // 🚫 Evitar doble registro
     const { data: existente } = await supabase
       .from("asistencias")
       .select("id")
@@ -69,7 +82,6 @@ export default function RegistroAsistencias() {
       return;
     }
 
-    // ✅ Registrar asistencia
     const { error } = await supabase.from("asistencias").insert([
       {
         dni: dni,
@@ -91,6 +103,37 @@ export default function RegistroAsistencias() {
     setClave("");
   };
 
+  // ⏳ Cargando estado
+  if (habilitado === null) {
+    return (
+      <div className="min-h-screen flex justify-center items-center">
+        <p className="text-lg">Cargando...</p>
+      </div>
+    );
+  }
+
+  // 🔒 BLOQUEO TOTAL
+  if (habilitado === false) {
+    return (
+      <div className="min-h-screen flex justify-center items-center bg-gray-100">
+
+        <div className="bg-white p-10 rounded-2xl shadow-xl text-center max-w-md">
+
+          <h1 className="text-2xl font-bold text-red-600 mb-4">
+            Registro Cerrado
+          </h1>
+
+          <p className="text-lg text-gray-700">
+            El registro de asistencias estará activo en el horario de clases
+          </p>
+
+        </div>
+
+      </div>
+    );
+  }
+
+  // ✅ SOLO SI ESTÁ HABILITADO
   return (
     <div className="min-h-screen bg-gray-100 flex justify-center items-center p-6 relative">
       
@@ -165,4 +208,5 @@ export default function RegistroAsistencias() {
     </div>
   );
 }
+
 
