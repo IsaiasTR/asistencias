@@ -12,11 +12,13 @@ export default function AdminAsistencias() {
   useEffect(() => {
     const pass = prompt("Ingrese clave docente");
 
-    if (pass === "1958") {
-      setAutorizado(true);
-    } else {
+    // 🚫 Si cancela o es incorrecta → fuera
+    if (!pass || pass !== "1958") {
       window.location.href = "/dashboard";
+      return;
     }
+
+    setAutorizado(true);
   }, []);
 
   // 🔄 Cargar estado SOLO si está autorizado
@@ -30,8 +32,9 @@ export default function AdminAsistencias() {
         .eq("id", 1)
         .single();
 
-      if (error) {
-        alert("Error al cargar estado");
+      // ⚠️ Manejo robusto de error o registro inexistente
+      if (error || !data) {
+        alert("Error: no existe configuración de asistencias");
         return;
       }
 
@@ -59,7 +62,7 @@ export default function AdminAsistencias() {
   if (!autorizado || estado === null) {
     return (
       <div className="min-h-screen flex justify-center items-center">
-        <p className="text-lg">Cargando...</p>
+        <p className="text-lg font-semibold">Cargando...</p>
       </div>
     );
   }
@@ -85,14 +88,14 @@ export default function AdminAsistencias() {
 
           <button
             onClick={() => cambiarEstado(true)}
-            className="w-full bg-green-600 hover:bg-green-700 text-white p-3 rounded-xl font-semibold"
+            className="w-full bg-green-600 hover:bg-green-700 text-white p-3 rounded-xl font-semibold transition"
           >
             HABILITAR
           </button>
 
           <button
             onClick={() => cambiarEstado(false)}
-            className="w-full bg-red-600 hover:bg-red-700 text-white p-3 rounded-xl font-semibold"
+            className="w-full bg-red-600 hover:bg-red-700 text-white p-3 rounded-xl font-semibold transition"
           >
             DESHABILITAR
           </button>
@@ -104,4 +107,5 @@ export default function AdminAsistencias() {
     </div>
   );
 }
+
 
